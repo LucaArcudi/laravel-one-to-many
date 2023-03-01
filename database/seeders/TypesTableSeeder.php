@@ -18,15 +18,15 @@ class TypesTableSeeder extends Seeder
         $types = [
             [
                 'name' => 'Front-end',
-                'color' => '#FFFF00'
+                'color' => '#540099'
             ],
             [
                 'name' => 'Back-end',
-                'color' => '#ffa500'
+                'color' => '#007fff'
             ],
             [
                 'name' => 'Full-stack',
-                'color' => '#ff0000'
+                'color' => '#b25d72'
             ]
         ];
 
