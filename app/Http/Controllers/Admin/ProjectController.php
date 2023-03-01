@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -11,11 +12,12 @@ use Illuminate\Validation\Rule;
 class ProjectController extends Controller
 {
 
-    public $validationRule = [
+    public $validationRules = [
         'title' => ['required', 'min:2', 'max:50', 'unique:projects'],
         'technologies' => ['required', 'min:2', 'max:50'],
         'description' => ['required', 'min:5'],
-        'date' => ['required']
+        'date' => ['required'],
+        'type_id' => ['required', 'exists:types,id']
     ];
 
     /**
@@ -37,7 +39,8 @@ class ProjectController extends Controller
     public function create()
     {
         $project = new Project();
-        return view('admin.projects.create', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.create', compact('project', 'types'));
     }
 
     /**
@@ -48,7 +51,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate($this->validationRule);
+        $data = $request->validate($this->validationRules);
         $data['slug'] = Str::slug($data['title']);
 
         $newProject = new Project();
@@ -77,7 +80,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
 
     /**
@@ -89,8 +93,8 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validationRule['title'] = ['required', 'min:2', 'max:50', Rule::unique('projects')->ignore($id)];
-        $data = $request->validate($this->validationRule);
+        $this->validationRules['title'] = ['required', 'min:2', 'max:50', Rule::unique('projects')->ignore($id)];
+        $data = $request->validate($this->validationRules);
         $data['slug'] = Str::slug($data['title']);
 
         $updatedProject = Project::findOrFail($id);

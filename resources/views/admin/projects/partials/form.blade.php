@@ -13,7 +13,15 @@
         </ul>
     </div>
     @endif
+    
 
+    <div class="mb-3">
+        <select class="form-control" name="type_id" >
+            @foreach ($types as $type )
+            <option value="{{ $type->id }}">{{ $type->name }}</option>    
+            @endforeach
+        </select>
+    </div>
     <div class="mb-3">
         <label class="form-label">title</label>
         <input type="text" class="form-control" value="{{ old('title', $project->title) }}" name="title">
